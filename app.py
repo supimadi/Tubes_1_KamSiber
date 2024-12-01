@@ -46,10 +46,14 @@ def add_student():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<string:id>') 
-def delete_student(id):
+# @app.route('/delete/<string:id>') kode sebelumnya
+# def delete_student(id): kode sebelumnya
+@app.route('/delete/<int:student_id>') 
+def delete_student(student_id):
     # RAW Query
-    db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
+    # db.session.execute(text(f"DELETE FROM student WHERE id={id}")) kode sebelumnya
+    student = Student.query.get_or_404(student_id)
+    db.session.delete(student)
     db.session.commit()
     return redirect(url_for('index'))
 

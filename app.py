@@ -60,13 +60,18 @@ def delete_student(student_id):
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
+    edit_student = Student.query.get_or_404(id)
     if request.method == 'POST':
-        name = request.form['name']
-        age = request.form['age']
-        grade = request.form['grade']
+        # name = request.form['name'] kode sebelumnya
+        # age = request.form['age'] kode sebelumnya
+        # grade = request.form['grade'] kode sebelumnya
+        edit_student.name = request.form['name']
+        edit_student.age = request.form['age']
+        edit_student.grade = request.form['grade']
         
         # RAW Query
-        db.session.execute(text(f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}"))
+        # db.session.execute(text(f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}")) kode sebelumnya
+        db.session.execute(text(f"UPDATE student SET name='{edit_student.name}', age={edit_student.age}, grade='{edit_student.grade}' WHERE id={edit_student.id}"))
         db.session.commit()
         return redirect(url_for('index'))
     else:

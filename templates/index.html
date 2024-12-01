@@ -9,9 +9,9 @@
     <div class="container mt-5">
         <h1>Students</h1>
         <form action="/add" method="POST">
-            <input type="text" name="name" placeholder="Name" required pattern="[A-Za-z\s]+" maxlength="100" title="Only alphabets and spaces are allowed.">>
+            <input type="text" name="name" placeholder="Name" required pattern="[A-Za-z\s]+" maxlength="100" title="Only alphabets and spaces are allowed.">
             <input type="number" name="age" placeholder="Age" required>
-            <input type="text" name="grade" placeholder="Grade" required pattern="[A-F][+-]?" title="Grade must be A, B, C, D, F, optionally followed by + or -.">>
+            <input type="text" name="grade" placeholder="Grade" required pattern="[A-F][+-]?" title="Grade must be A, B, C, D, F, optionally followed by + or -.">
             <button type="submit" class="btn btn-primary">Add Student</button>
         </form>
         <table class="table mt-3">

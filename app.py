@@ -29,6 +29,9 @@ def add_student():
     age = request.form['age']
     grade = request.form['grade']
     
+    # Sanitasi input menggunakan bleach
+    name = bleach.clean(name)
+    grade = bleach.clean(grade)
 
     connection = sqlite3.connect('instance/students.db')
     cursor = connection.cursor()

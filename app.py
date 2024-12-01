@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, make_response, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import sqlite3
@@ -7,6 +7,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+PIN_AUTH = "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76"
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +23,13 @@ class Student(db.Model):
 def index():
     # RAW Query
     students = db.session.execute(text('SELECT * FROM student')).fetchall()
-    return render_template('index.html', students=students)
+
+    tempelate = render_template('index.html', students=students)
+    respone = make_response(tempelate)
+
+    respone.set_cookie("PIN_AUTH", PIN_AUTH, samesite="Strict")
+
+    return respone
 
 @app.route('/add', methods=['POST'])
 def add_student():

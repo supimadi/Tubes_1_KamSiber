@@ -2,6 +2,8 @@ from flask import Flask, make_response, render_template, request, redirect, url_
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import sqlite3
+import bleach
+import re
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
@@ -37,6 +39,16 @@ def add_student():
     age = request.form['age']
     grade = request.form['grade']
     
+    # Sanitasi input menggunakan bleach
+    name = bleach.clean(name)
+    grade = bleach.clean(grade)
+
+    #Mencegah form grade menerima angka
+    grade = request.form.get("grade")
+
+    if not re.fullmatch(r"^[A-F][+-]?$", grade):
+        return "Invalid grade. Only A-F with optional + or - is allowed.", 400
+
 
     connection = sqlite3.connect('instance/students.db')
     cursor = connection.cursor()

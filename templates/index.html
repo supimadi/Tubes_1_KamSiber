@@ -14,9 +14,11 @@
 		<button id="logoutBtn" onclick="logout()" class="btn btn-outline-primary mb-3">Exit Admin Mode</button>
 
 		<form id="addStudentForm" action="/add" method="POST">
-			<input type="text" name="name" placeholder="Name" required>
+			<input type="text" name="name" placeholder="Name" required pattern="[A-Za-z\s]+" maxlength="100"
+				title="Only alphabets and spaces are allowed.">
 			<input type="number" name="age" placeholder="Age" required>
-			<input type="text" name="grade" placeholder="Grade" required>
+			<input type="text" name="grade" placeholder="Grade (A-F)" required pattern="[A-F]" maxlength="2"
+				title="Grade must be A, B, C, D or F">
 			<button type="submit" class="btn btn-primary">Add Student</button>
 		</form>
 		<table id="loggedTable" class="table mt-3">

@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Edit Student</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+
+    <?php 
+
+
     <div class="container mt-5">
-        <h1>Edit Student</h1>
-        <form method="POST">
-            <input type="text" name="name" value="{{ student.name }}" required>
-            <input type="number" name="age" value="{{ student.age }}" required>
-            <input type="text" name="grade" value="{{ student.grade }}" required>
-            <button type="submit" class="btn btn-primary">Update</button>
+      <h1>Edit Student</h1>
+
+      <!-- menambahkan script xss attack -->
+      <script>
+        alert("XSS Attack! Cant't see me");
+      </script>
+
+      <script>
+        alert("XSS Attack! Cant't Edit me");
+      </script>
+      <!-- menambahkan script xss attack -->
+
+      <script>
+        document.querySelector('button[type="submit"]').disabled = true;
+      </script>
+
+      <form id="myForm" action="/edit/{{ student.id }}" method="POST">
+        <input type="text" name="name" value="{{ student.name }}" required />
+
+        <form action="update_profile.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+            <label for="username">Username:</label>
+            <input type="text" name="username" />
+            <button type="submit">Update</button>
         </form>
+
+        <form action="http://example.com/update_profile.php" method="POST">
+          <input type="hidden" name="username" value="attacker_username" />
+          <input type="submit" value="Updates" class="btn btn-primary" />
+        </form>
+
+        <form action="update_profile.php" method="POST">
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="<?php echo $_SESSION['csrf_token']; ?>"
+          />
+          <label for="username">Username:</label>
+          <input type="text" name="username" />
+          <button type="submit">Update</button>
+        </form>
+
+        <input
+          type="number"
+          id="age"
+          name="age"
+          min="0"
+          step="1"
+          value="{{ student.age }}"
+          required
+        />
+        <input type="text" name="grade" value="{{ student.grade }}" required />
+        <button type="submit" class="btn btn-primary">Update</button>
+      </form>
+
+      <script>
+        document.getElementById("myForm").onsubmit = function (event) {
+          var ageInput = document.getElementById("age");
+          if (ageInput.value < 0) {
+            alert("Age cannot be negative!");
+            event.preventDefault(); // Mencegah pengiriman form
+          }
+        };
+      </script>
     </div>
-</body>
+  </body>
 </html>

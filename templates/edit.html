@@ -9,9 +9,9 @@
     <div class="container mt-5">
         <h1>Edit Student</h1>
         <form method="POST">
-            <input type="text" name="name" value="{{ student.name }}" required>
+            <input type="text" name="name" value="{{ student.name }}" required pattern="[A-Za-z\s]+" maxlength="100" title="Only alphabets and spaces are allowed.">
             <input type="number" name="age" value="{{ student.age }}" required>
-            <input type="text" name="grade" value="{{ student.grade }}" required>
+            <input type="text" name="grade" value="{{ student.grade }}" required pattern="^[A-F][+-]?$" title="Grade must be A, B, C, D, F, optionally followed by + or -.">
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>

